@@ -10,7 +10,7 @@ public class App {
 	public static void main(String[] args) {
 		PeliculaServices service = new PeliculaServices();
 		try {
-			List<Pelicula> peliculas = service.borrarPelicula();
+			List<Pelicula> peliculas = service.borrarPelicula(100);
 			for (Pelicula pelicula : peliculas) {
 				System.out.println(pelicula);
 			}

@@ -10,7 +10,7 @@ import ejercicio01.modelo.Pelicula;
 
 public class PeliculaServices {
 
-	public List<Pelicula> borrarPelicula() throws PeliculasException {
+	public List<Pelicula> borrarPelicula(Integer longitud) throws PeliculasException {
 		Connection conn = null;
 		try {
 			conn = new OpenConnection().abrirConexion();
@@ -18,7 +18,7 @@ public class PeliculaServices {
 			List<Pelicula> pelis = dao.devolverPeliculas(conn);
 			Iterator<Pelicula> iterator = pelis.iterator();
 			while (iterator.hasNext()) {
-				if (iterator.next().getLongitud() > 100) {
+				if (iterator.next().getLongitud() != longitud ) {
 					iterator.remove();
 				}
 			}

@@ -11,13 +11,13 @@ import ejercicio01.modelo.Pelicula;
 @RestController
 public class PeliculaServiceRest {
 	@PostMapping("/peliculas")
-	public List<Pelicula> getPeliculas(@RequestParam Integer duracion) {
+	public List<Pelicula> getPeliculas(@RequestParam Integer duracion) throws PeliculasServiceException {
 		PeliculaServices peliService = new PeliculaServices();
 		List<Pelicula> lista = null;
 		try {
 			lista = peliService.borrarPelicula(duracion);
 		} catch (PeliculasException e) {
-			e.printStackTrace();
+			throw new PeliculasServiceException("Error de servidor");
 		}
 		return lista;
 

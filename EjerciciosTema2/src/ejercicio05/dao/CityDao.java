@@ -1,6 +1,7 @@
 package ejercicio05.dao;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -40,7 +41,7 @@ public class CityDao {
 		}
 	}
 
-	public City devolverCiudad(Connection conn, Integer id) throws SQLException {
+	public City devolverCiudad(Connection conn, Long id) throws SQLException {
 		Statement stmt = null;
 		ResultSet rs = null;
 
@@ -55,6 +56,44 @@ public class CityDao {
 				ciudad.setCountryId(rs.getLong("country_id"));
 			}
 			return ciudad;
+
+		} finally {
+			try {
+				stmt.close();
+			} catch (Exception e) {
+
+			}
+		}
+	}
+
+	public City crearCiudad(Connection conn, City ciudad) throws SQLException {
+		PreparedStatement stmt = null;
+
+		try {
+			stmt = conn.prepareStatement("INSERT INTO city (city, country_id) VALUES (?,?)");
+			stmt.setString(1, ciudad.getDescripcion());
+			stmt.setLong(2, ciudad.getCountryId());
+			stmt.executeQuery();
+
+		} finally {
+			try {
+				stmt.close();
+			} catch (Exception e) {
+
+			}
+		}
+		return ciudad;
+	}
+
+	public void updateCity(Connection conn, City ciudad) throws SQLException {
+		PreparedStatement stmt = null;
+
+		try {
+			stmt = conn.prepareStatement("UPDATE city SET city = ? AND country_id = ? WHERE id = ?");
+			stmt.setString(1, ciudad.getDescripcion());
+			stmt.setLong(2, ciudad.getCountryId());
+			stmt.setLong(3, ciudad.getId());
+			stmt.executeQuery();
 
 		} finally {
 			try {

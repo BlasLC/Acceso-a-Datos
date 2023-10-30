@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -43,7 +44,13 @@ public class CityServicesImp implements CityService {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
-			throw new ejercicio05.exceptions.ServerErrorException("Error del servidor");
+			throw new ServerErrorException("Error del servidor");
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -56,10 +63,21 @@ public class CityServicesImp implements CityService {
 		try {
 			conn = con.abrirConexion();
 			ciudad = cDao.devolverCiudad(conn, id);
-			return ciudad;
+			if (id != null) {
+				return ciudad;
+			} else {
+				throw new NotFoundException("No existe ciudad con esa ID");
+			}
+
 		} catch (SQLException e) {
 			e.printStackTrace();
-			throw new ejercicio05.exceptions.ServerErrorException("Error del servidor");
+			throw new ServerErrorException("Error del servidor");
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -75,42 +93,77 @@ public class CityServicesImp implements CityService {
 			ciudad = cDao.crearCiudad(conn, city);
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			} finally {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
 		}
-		return city;
+		return ciudad;
 	}
 
 	@Override
 	@PutMapping("/city")
 	public void updateCity(@RequestBody City ciudad) throws NotFoundException, ServerErrorException {
 		Connection conn = null;
-
 		CityDao cDao = new CityDao();
-		List<City> lista = new ArrayList<City>();
+
 		try {
 			conn = con.abrirConexion();
-			lista = cDao.devolverPeliculas(conn, "");
-			for (City city : lista) {
-				if (city.getId() == ciudad.getId()) {
-					cDao.updateCity(conn, ciudad);
-				} else {
-					throw new NotFoundException("No existe ciudad para la id");
-				}
+			if (cDao.updateCity(conn, ciudad) == 0) {
+				throw new NotFoundException("No existe ciudad para la id");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			throw new ejercicio05.exceptions.ServerErrorException("Error del servidor");
+			throw new ServerErrorException("Error del servidor");
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 
 	}
 
 	@Override
-	public City updateSelectiveCity(City city) throws NotFoundException {
+	@PatchMapping("/city")
+	public City updateSelectiveCity(@RequestBody City city) throws NotFoundException, ServerErrorException {
+		Connection conn = null;
+		CityDao cDao = new CityDao();
+		try {
+			conn = con.abrirConexion();
+			if (city.getId() == null) {
+				
+			} else if (city.getDescripcion() == null) {
+				
+			} else if (city.getCountryId() == null) {
 
-		return null;
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new ServerErrorException("Error del servidor");
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return city;
 	}
 
 	@Override
 	public void deleteCity(Long id) throws NotFoundException {
+
 	}
 
 }

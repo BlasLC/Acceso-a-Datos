@@ -50,12 +50,14 @@ public class CityDao {
 			String sql = "SELECT * FROM city WHERE city_id = " + id + ";";
 			stmt = conn.createStatement();
 			rs = stmt.executeQuery(sql);
-			while (rs.next()) {
+			if (rs.next()) {
 				ciudad.setId(rs.getLong("city_id"));
 				ciudad.setDescripcion(rs.getString("city"));
 				ciudad.setCountryId(rs.getLong("country_id"));
+				return ciudad;
+			} else {
+				return null;
 			}
-			return ciudad;
 
 		} finally {
 			try {
@@ -70,10 +72,30 @@ public class CityDao {
 		PreparedStatement stmt = null;
 
 		try {
-			stmt = conn.prepareStatement("INSERT INTO city (city, country_id) VALUES (?,?)");
+			stmt = conn.prepareStatement("INSERT INTO city (city_id, city, country_id) VALUES (?,?,?)");
+			stmt.setLong(1, ciudad.getId());
+			stmt.setString(2, ciudad.getDescripcion());
+			stmt.setLong(3, ciudad.getCountryId());
+			stmt.execute();
+
+		} finally {
+			try {
+				stmt.close();
+			} catch (Exception e) {
+			}
+		}
+		return ciudad;
+	}
+
+	public Integer updateCity(Connection conn, City ciudad) throws SQLException {
+		PreparedStatement stmt = null;
+
+		try {
+			stmt = conn.prepareStatement("UPDATE city SET city = ? , country_id = ? WHERE city_id = ?");
 			stmt.setString(1, ciudad.getDescripcion());
 			stmt.setLong(2, ciudad.getCountryId());
-			stmt.executeQuery();
+			stmt.setLong(3, ciudad.getId());
+			return stmt.executeUpdate();
 
 		} finally {
 			try {
@@ -82,24 +104,19 @@ public class CityDao {
 
 			}
 		}
-		return ciudad;
 	}
 
-	public void updateCity(Connection conn, City ciudad) throws SQLException {
+	public void updateSelective(Connection conn, City ciudad) throws SQLException {
 		PreparedStatement stmt = null;
-
 		try {
-			stmt = conn.prepareStatement("UPDATE city SET city = ? AND country_id = ? WHERE id = ?");
+			stmt = conn.prepareStatement("UPDATE city SET city = ? , country_id = ? WHERE city_id = ?");
 			stmt.setString(1, ciudad.getDescripcion());
 			stmt.setLong(2, ciudad.getCountryId());
 			stmt.setLong(3, ciudad.getId());
-			stmt.executeQuery();
-
 		} finally {
 			try {
 				stmt.close();
 			} catch (Exception e) {
-
 			}
 		}
 	}

@@ -30,7 +30,8 @@ public class CiudadesClientImp implements CiudadesClient {
 		} catch (HttpStatusCodeException e) {
 			if (e.getStatusCode() == HttpStatus.NOT_FOUND) {
 				throw new CiudadNoEncontradaException("No existe ciudad con filtro " + filtroDescripcion);
-			} else if (e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR) {
+			}
+			if (e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR) {
 				throw new CiudadErrorException("Error del servidor");
 			}
 			throw e;
@@ -46,7 +47,8 @@ public class CiudadesClientImp implements CiudadesClient {
 		} catch (HttpStatusCodeException e) {
 			if (e.getStatusCode() == HttpStatus.NOT_FOUND) {
 				throw new CiudadNoEncontradaException("No existe ciudad con id " + id);
-			} else if (e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR) {
+			}
+			if (e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR) {
 				throw new CiudadErrorException("Error del servidor");
 			}
 			throw e;
@@ -75,7 +77,8 @@ public class CiudadesClientImp implements CiudadesClient {
 		} catch (HttpStatusCodeException e) {
 			if (e.getStatusCode() == HttpStatus.NOT_FOUND) {
 				throw new CiudadNoEncontradaException("No ");
-			} else if (e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR) {
+			}
+			if (e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR) {
 				throw new CiudadErrorException("Error del servidor");
 			}
 			throw e;
@@ -91,7 +94,8 @@ public class CiudadesClientImp implements CiudadesClient {
 		} catch (HttpStatusCodeException e) {
 			if (e.getStatusCode() == HttpStatus.NOT_FOUND) {
 				throw new CiudadNoEncontradaException("No existe ciudad c");
-			} else if (e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR) {
+			}
+			if (e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR) {
 				throw new CiudadErrorException("Error del servidor");
 			}
 			throw e;
@@ -106,7 +110,8 @@ public class CiudadesClientImp implements CiudadesClient {
 		} catch (HttpStatusCodeException e) {
 			if (e.getStatusCode() == HttpStatus.NOT_FOUND) {
 				throw new CiudadNoEncontradaException("No existe ciudad con id " + id);
-			} else if (e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR) {
+			}
+			if (e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR) {
 				throw new CiudadErrorException("Error del servidor");
 			}
 			throw e;
